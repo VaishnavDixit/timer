@@ -1,0 +1,63 @@
+body{
+	width: 250px;
+	height: auto;
+	background-color: rgb(207, 228, 235);
+	border: 2px solid black;
+	border-radius: 5px;
+	padding: 5px;
+}
+.button{
+	display: block;
+	background-color: #4ddf4f00;
+  	color: rgb(5, 5, 5);
+	border: 3px solid black;
+	border-radius: 10px;
+  	padding: 10px;
+  	text-align: center;
+	justify-content: center;
+  	display: inline-block;
+  	font-size: 16px;
+	width: 50%;
+	height: 50px;
+  	margin-left: 25%;
+	margin-right: 25%; 
+	margin-top: 10px;
+  	cursor: pointer;
+	transition:  border 0.1s ease;
+}
+.button:hover{
+	border: 4px solid black;
+}
+.heading{
+	width:100%;
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.time{
+	width: 80%;
+	margin: auto;
+	padding: 5px;
+}
+.min{
+	float: right;
+}
+.hr{
+	float: left;
+}
+.iphr, .ipmin{
+	width: 50px;
+	height:20px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.head2{
+	display: block;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0;
+	margin-bottom: 0;
+	text-align: center;
+}
