@@ -1,10 +1,18 @@
 body {
 	width: 250px;
-	height: auto;
+	height: inherit;
 	background-color: rgb(207, 228, 235);
 	border: 2px solid black;
 	border-radius: 5px;
 	padding: 5px;
+}
+
+.heading {
+	width: 100%;
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 0;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 #button {
@@ -26,45 +34,41 @@ body {
 	transition: border 0.2s ease-out;
 }
 
-#timediv{
+#timediv {
 	display: none;
 	margin: auto;
-	width:75%;
-	height: 40px;
-	line-height: 40px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 20px;
+	line-height: 20px;
+	width: 90%;
 }
 
-#timedisplay{
+#timedisplay {
 	float: left;
-	margin-top: 0;
-	margin-bottom: 0;
-	text-align: center;
-	height: 40px;
+	display: block;
+	margin: 0;
+	height: 20px;
 	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	font-weight: bold;	
 }
-#stopbtn{
+
+#stopbtn {
 	float: right;
 	display: block;
-	margin-top: 0;
-	margin-bottom: 0;
-	text-align: center;
-	height: 40px;
+
+	align-items: middle;
+	height: 20px;
 	width: 60px;
 }
+
 #button:hover {
 	border: 4px solid black;
 }
 
-.heading {
-	width: 100%;
-	text-align: center;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-.time {
+#timeWindow {
 	width: 80%;
-	height:30px;
+	height: 30px;
 	margin: auto;
 	padding: 5px;
 }
@@ -72,10 +76,17 @@ body {
 .min {
 	float: right;
 	caret-color: transparent;
+	height: 20px;
 }
 
 .hr {
 	float: left;
+	height: 20px;
+}
+
+span {
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	height: 20px;
 }
 
 .iphr,
@@ -86,7 +97,8 @@ body {
 	margin-bottom: auto;
 }
 
-.head2 {
+#head2 {
+	padding: 10px;
 	display: block;
 	width: fit-content;
 	margin-left: auto;
@@ -94,10 +106,6 @@ body {
 	margin-top: 0;
 	margin-bottom: 0;
 	text-align: center;
-	font-family: 'Times New Roman', Times, serif;
-}
-
-h1 {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 35px;
+	font-weight: bold;
 }
