@@ -27,6 +27,10 @@ body {
 	transition: border 0.2s ease-out;
 }
 
+#timedisplay{
+	display: initial;
+}
+
 #button:hover {
 	border: 4px solid black;
 }
