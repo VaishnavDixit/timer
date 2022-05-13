@@ -7,7 +7,7 @@ body {
 	padding: 5px;
 }
 
-.button {
+#button {
 	display: block;
 	background-color: #4ddf4f00;
 	color: rgb(5, 5, 5);
@@ -27,7 +27,7 @@ body {
 	transition: border 0.2s ease-out;
 }
 
-.button:hover {
+#button:hover {
 	border: 4px solid black;
 }
 
