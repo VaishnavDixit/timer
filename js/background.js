@@ -13,17 +13,25 @@
 // 	}
 // });
 
-chrome.runtime.onMessage.addListener((message, _, sendResponse ) => {
-	//const tabId = getForegroundTabId();
-	if (message.data === "Start the timer") {
-		console.log("clicked btn!!!!");
-		sendResponse({farewell: "goodbye"});
-	}
+chrome.runtime.onMessage.addListener((message) => {
+	let hh = message.hh;
+	let mm = message.mm;
+	let toStop=message.toStop;
+	console.log(hh);
+	console.log(mm);
+	let totalTime = (hh*60 + mm); // time in mill sec (debug mode)
+	var check = setInterval(()=>{
+		totalTime-=1;
+		if(totalTime==0){
+			console.log("times up");
+			clearInterval(check);
+			chrome.runtime.sendMessage({
+				status: "ok"
+			});
+		}
+	},1000);
+	return true;
 });
-
-
-
-
 
 // startButton.style.display = "none";
 // 	timeWindow.style.display = "none";
