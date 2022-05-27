@@ -1,52 +1,46 @@
-
-// chrome.storage.onChanged.addListener(function (changes, namespace) {
-// 	for (let [key, {
-// 		oldValue,
-// 		newValue
-// 	}] of Object.entries(changes)) {
-// 		if (key === 'hh') {
-
-// 			console.log("clicked!!!");
-// 		}
-// 	}
-// });
-
-//message passing
+var check=0;
 chrome.runtime.onMessage.addListener((message) => {
-	let hhh=-1, mmm=-1, check;
+	let hhh = -1, mmm = -1;
 	if (message.status === "start") {
 		console.log("msg received");
 		console.log(`values are: hh:${message.hh} mm:${message.mm}`);
 		hhh = message.hh;
 		mmm = message.mm;
 		console.log(`time: ${hhh}: ${mmm}`);
-		let totalTime = (hhh * 60 + mmm); // time in mill sec (debug mode)
-		totalTime-=1;
+		let totalTime = totalSecs(hhh, mmm); // time in mill sec (debug mode)
+		totalTime -= 1;
 		check = setInterval(() => {
 			if (totalTime == 0) {
-				console.log("times up");
+				stopTimer(check);
+			} else {
 				chrome.runtime.sendMessage({
-					isCompleted: true
+					tot: totalTime,
+					isCompleted: false
 				});
-				clearInterval(check);
+				totalTime -= 1;
 			}
-			chrome.runtime.sendMessage({
-				tot: totalTime,
-				isCompleted: false
-			});
-			totalTime -= 1;
-		}, 1000);	
+		}, 1000);
 	}
-	else if(message.status === "stop"){
-		clearInterval(check);
-		console.log("times up after hitting stop");
-		chrome.runtime.sendMessage({
-			isCompleted: true
-		});
+	else if (message.status === "stop") {
+		console.log("stop button pressed")
+		stopTimer(check);
 	}
 	return true;
 	//return Promise.resolve("Dummy response to keep the console quiet");
 });
+
+function stopTimer(check) {
+	clearInterval(check);
+	console.log("times up!");
+	chrome.runtime.sendMessage({
+		isCompleted: true
+	});
+}
+
+function totalSecs(hh, mm){
+	return ((hh * 60) + mm); // not correct: debug mode
+}
+
 
 // startButton.style.display = "none";
 // 	timeWindow.style.display = "none";
