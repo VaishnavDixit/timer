@@ -13,33 +13,41 @@
 
 $(document).ready(() => {
 	$("#button").click(() => {
-
+		$(this).attr("disabled", "disabled");
 		let mm = $("#ipmin").val();
 		let hh = $("#iphr").val();
-		if (hh >= 6) {
-			$("#head2").html("use arrows to input time :)");
-			$("#head2").css("color", "red");
-		} else {
-			resetHead2();
+
+		hh = (hh == "") ? 0 : hh;
+		mm = (mm == "") ? 0 : mm;
+		if (hh == 0 && mm == 0) {
+			popup.showMessage("*time is not set yet");
+			popup.resetInput();
+		}
+		else if (hh > 6 || hh < 0 || mm < 0 || mm > 360) {
+			popup.showMessage("*use arrows to enter a valid input :)");
+			popup.resetInput();
+		}
+		else {
+			popup.resetInput();
+			popup.resetHead2();
+			popup.timerRunningMode();
 			$("#timedisplay").html(`hh:${hh} mm:${mm}`);
 			chrome.runtime.sendMessage({
 				status: "start",
 				hh: hh,
-				mm: mm
+				mm: mm,
 			});
 		}
 	})
 	$("#stopbtn").click(() => {
-		resetHead2();
-		chrome.runtime.sendMessage({
-			status: "stop"
-		});
+		$(this).attr("disabled", "disabled");
+		popup.stopTimer();
 	})
 })
+
 chrome.runtime.onMessage.addListener((message) => {
 	if (message.isCompleted === true) {
-		alert("completed");
-		$("#timedisplay").html("-adfg--");
+		popup.timeInputMode();
 	}
 	else if (message.isCompleted === false) {
 		let total = message.tot;
@@ -50,7 +58,39 @@ chrome.runtime.onMessage.addListener((message) => {
 	//return Promise.resolve("Dummy response to keep the console quiet");
 });
 
-function resetHead2() {
-	$("#head2").html("Enter time:");
-	$("#head2").css("color", "");
+let popup = {
+	showMessage: function (msg) {
+		$("#head2").html(msg);
+		$("#head2").css("color", "red");
+	},
+	stopTimer: function () {
+		popup.timeInputMode();
+		chrome.runtime.sendMessage({
+			status: "stop"
+		});
+		$("#button").removeAttr("disabled");
+	},
+	resetHead2: function () {
+		$("#head2").html("Enter time:");
+		$("#head2").css("color", "");
+	},
+	resetInput: function () {
+		$("#stopbtn").removeAttr("disabled");
+		$("#ipmin").val("");
+		$("#iphr").val("");
+	},
+	timerRunningMode: function () {
+		$("#head2").css("display", "none");
+		$("#timeWindow").css("display", "none");
+		$("#button").css("display", "none");
+		$("#timedisplay").css("display", "block");
+		$("#stopbtn").css("display", "block");
+	},
+	timeInputMode: function () {
+		$("#head2").css("display", "block");
+		$("#timeWindow").css("display", "block");
+		$("#button").css("display", "block");
+		$("#timedisplay").css("display", "none");
+		$("#stopbtn").css("display", "none");
+	},
 }

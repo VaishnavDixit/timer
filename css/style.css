@@ -43,7 +43,7 @@ body {
 }
 
 #timedisplay {
-	display: block;
+	display: none;
 	width: fit-content;
 	margin: auto;
 	height: 20px;
@@ -52,7 +52,7 @@ body {
 }
 
 #stopbtn {
-	display: block;
+	display: none;
 	margin: auto;
 	height: 20px;
 	align-items: middle;
