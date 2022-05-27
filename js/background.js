@@ -13,7 +13,7 @@
 
 //message passing
 chrome.runtime.onMessage.addListener((message) => {
-	let hhh=-1, mmm=-1;
+	let hhh=-1, mmm=-1, check;
 	if (message.status === "start") {
 		console.log("msg received");
 		console.log(`values are: hh:${message.hh} mm:${message.mm}`);
@@ -21,12 +21,8 @@ chrome.runtime.onMessage.addListener((message) => {
 		mmm = message.mm;
 		console.log(`time: ${hhh}: ${mmm}`);
 		let totalTime = (hhh * 60 + mmm); // time in mill sec (debug mode)
-		let check = setInterval(() => {
-			chrome.runtime.sendMessage({
-				tot: totalTime,
-				isCompleted: false
-			});
-			totalTime -= 1;
+		totalTime-=1;
+		check = setInterval(() => {
 			if (totalTime == 0) {
 				console.log("times up");
 				chrome.runtime.sendMessage({
@@ -34,9 +30,22 @@ chrome.runtime.onMessage.addListener((message) => {
 				});
 				clearInterval(check);
 			}
-		}, 1000);
-		
+			chrome.runtime.sendMessage({
+				tot: totalTime,
+				isCompleted: false
+			});
+			totalTime -= 1;
+		}, 1000);	
 	}
+	else if(message.status === "stop"){
+		clearInterval(check);
+		console.log("times up after hitting stop");
+		chrome.runtime.sendMessage({
+			isCompleted: true
+		});
+	}
+	return true;
+	//return Promise.resolve("Dummy response to keep the console quiet");
 });
 
 // startButton.style.display = "none";
