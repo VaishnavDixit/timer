@@ -4,33 +4,39 @@
 // 		oldValue,
 // 		newValue
 // 	}] of Object.entries(changes)) {
-// 		if (key === 'isClicked') {
-// 			chrome.storage.sync.set({
-// 				'isClicked': false
-// 			});
+// 		if (key === 'hh') {
+
 // 			console.log("clicked!!!");
 // 		}
 // 	}
 // });
 
+//message passing
 chrome.runtime.onMessage.addListener((message) => {
-	let hh = message.hh;
-	let mm = message.mm;
-	let toStop=message.toStop;
-	console.log(hh);
-	console.log(mm);
-	let totalTime = (hh*60 + mm); // time in mill sec (debug mode)
-	var check = setInterval(()=>{
-		totalTime-=1;
-		if(totalTime==0){
-			console.log("times up");
-			clearInterval(check);
+	let hhh=-1, mmm=-1;
+	if (message.status === "start") {
+		console.log("msg received");
+		console.log(`values are: hh:${message.hh} mm:${message.mm}`);
+		hhh = message.hh;
+		mmm = message.mm;
+		console.log(`time: ${hhh}: ${mmm}`);
+		let totalTime = (hhh * 60 + mmm); // time in mill sec (debug mode)
+		let check = setInterval(() => {
 			chrome.runtime.sendMessage({
-				status: "ok"
+				tot: totalTime,
+				isCompleted: false
 			});
-		}
-	},1000);
-	return true;
+			totalTime -= 1;
+			if (totalTime == 0) {
+				console.log("times up");
+				chrome.runtime.sendMessage({
+					isCompleted: true
+				});
+				clearInterval(check);
+			}
+		}, 1000);
+		
+	}
 });
 
 // startButton.style.display = "none";

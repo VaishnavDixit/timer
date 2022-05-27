@@ -6,6 +6,9 @@
 		"default_popup": "/html/popup.html",
 		"default_title": "View timer"
 	},
+	"permissions":[
+		"storage"
+	],
 	"background": {
 		"service_worker": "/js/background.js"
 	},

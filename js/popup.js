@@ -9,29 +9,24 @@
 // 	chrome.runtime.sendMessage({data: "Start the timer"}, function(response) {
 // 		console.log(response.farewell);
 // 	});
-
 // });
 
 $(document).ready(() => {
 	$("#button").click(() => {
 		let mm = $("#ipmin").val();
 		let hh = $("#iphr").val();
-		console.log(hh);
-		console.log(mm);
-		// chrome.storage.sync.set({
-		// 	'hh': hh,
-		// 	'mm': mm
-		// });	
 		chrome.runtime.sendMessage({
-			//data: "Start the timer",
+			status: "start",
 			hh: hh,
 			mm: mm
 		});
 	})
 })
-
 chrome.runtime.onMessage.addListener((message) => {
-	if (message.status === "ok")
+	if (message.isCompleted === true)
 		alert("completed");
+	else if(message.isCompleted === false){
+		console.log(message.tot);
+	}
 	return true;
 });
