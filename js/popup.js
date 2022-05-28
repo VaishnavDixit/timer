@@ -1,22 +1,18 @@
-// var startButton = document.getElementById("button");
-// var timetext = document.getElementById("timedisplay");
-// var timeD = document.getElementById("timediv");
-// var stopBtn = document.getElementById("stopbtn");
-// var text = document.getElementById("head2");
-// var timeWindow = document.getElementById("timeWindow");
-
-// startButton.addEventListener("click", function () {
-// 	chrome.runtime.sendMessage({data: "Start the timer"}, function(response) {
-// 		console.log(response.farewell);
-// 	});
-// });
-
 $(document).ready(() => {
+	console.log("Page opened.");
+	chrome.storage.sync.get(['status'], function (result) {
+		if (result.status === "running") {
+			console.log("Timer is running!");
+			popup.updateValues();
+			popup.timerRunningDisplay();
+		} else {
+			console.log("Timer is not running!");
+			popup.timeInputMode();
+		}
+	});
 	$("#button").click(() => {
-		$(this).attr("disabled", "disabled");
 		let mm = $("#ipmin").val();
 		let hh = $("#iphr").val();
-
 		hh = (hh == "") ? 0 : hh;
 		mm = (mm == "") ? 0 : mm;
 		if (hh == 0 && mm == 0) {
@@ -28,36 +24,31 @@ $(document).ready(() => {
 			popup.resetInput();
 		}
 		else {
-			popup.resetInput();
-			popup.resetHead2();
-			popup.timerRunningMode();
-			$("#timedisplay").html(`hh:${hh} mm:${mm}`);
 			chrome.runtime.sendMessage({
-				status: "start",
+				status: "Start",
 				hh: hh,
-				mm: mm,
+				mm: mm
 			});
+			popup.updateValues();
+			popup.timerRunningDisplay();
 		}
-	})
+	});
 	$("#stopbtn").click(() => {
-		$(this).attr("disabled", "disabled");
+		chrome.runtime.sendMessage({
+			status: "stop"
+		});
 		popup.stopTimer();
 	})
-})
-
+});
 chrome.runtime.onMessage.addListener((message) => {
 	if (message.isCompleted === true) {
 		popup.timeInputMode();
 	}
 	else if (message.isCompleted === false) {
-		let total = message.tot;
-		console.log(total);
-		$("#timedisplay").html(`hh:${Math.floor(total / 60)} mm:${total % 60}`);
+		popup.updateValues();
 	}
 	return true;
-	//return Promise.resolve("Dummy response to keep the console quiet");
 });
-
 let popup = {
 	showMessage: function (msg) {
 		$("#head2").html(msg);
@@ -65,32 +56,54 @@ let popup = {
 	},
 	stopTimer: function () {
 		popup.timeInputMode();
-		chrome.runtime.sendMessage({
-			status: "stop"
-		});
-		$("#button").removeAttr("disabled");
+		//$("#button").removeAttr("disabled");
 	},
 	resetHead2: function () {
 		$("#head2").html("Enter time:");
 		$("#head2").css("color", "");
 	},
 	resetInput: function () {
-		$("#stopbtn").removeAttr("disabled");
+		//$("#stopbtn").removeAttr("disabled");
 		$("#ipmin").val("");
 		$("#iphr").val("");
 	},
-	timerRunningMode: function () {
+	startTimer: function (hh, mm) {
+		chrome.storage.sync.set({ status: "running", hh: hh, mm: mm });
+		popup.timerRunningMode();
+		chrome.runtime.sendMessage({
+			status: "start",
+			hh: hh,
+			mm: mm
+		});
+		popup.resetInput();
+		popup.resetHead2();
+	},
+	timerRunningDisplay: function () {
 		$("#head2").css("display", "none");
 		$("#timeWindow").css("display", "none");
 		$("#button").css("display", "none");
+		$("#progressBar").css("display", "block");
 		$("#timedisplay").css("display", "block");
 		$("#stopbtn").css("display", "block");
+	},
+	updateValues: function(){
+		chrome.storage.sync.get(['hh', 'mm', 'initialHH', 'initialMM'], function (result) {
+			let newHH = result.hh, newMM = result.mm;
+			let tot = (Number(result.initialHH) * 60) + Number(result.initialMM);
+			let precentage = ((Number((newHH) * 60) + Number(newMM)) / Number(tot)) * 100;
+			console.log(precentage);
+			$("#l").css("width", 100-precentage + '%');
+			$("#r").css("width", precentage + '%');
+			$("#timedisplay").html(`hh:${newHH} mm:${newMM}`);
+			console.log(`hh:${newHH}, mm:${newMM}`);
+		});
 	},
 	timeInputMode: function () {
 		$("#head2").css("display", "block");
 		$("#timeWindow").css("display", "block");
 		$("#button").css("display", "block");
+		$("#progressBar").css("display", "none");
 		$("#timedisplay").css("display", "none");
 		$("#stopbtn").css("display", "none");
-	},
+	}
 }
