@@ -2,15 +2,18 @@ $(document).ready(() => {
 	console.log("Page opened.");
 	chrome.storage.sync.get(['status'], function (result) {
 		if (result.status === "running") {
-			console.log("Timer is running!");
-			popup.updateValues();
 			popup.timerRunningDisplay();
+			console.log("Timer is running!");
+			chrome.storage.sync.get(['hh', 'mm'], (res) => {
+				popup.updateValues(res.hh, res.mm);
+			});
 		} else {
 			console.log("Timer is not running!");
 			popup.timeInputMode();
 		}
 	});
 	$("#button").click(() => {
+		console.log("clicked start!");
 		let mm = $("#ipmin").val();
 		let hh = $("#iphr").val();
 		hh = (hh == "") ? 0 : hh;
@@ -20,16 +23,17 @@ $(document).ready(() => {
 			popup.resetInput();
 		}
 		else if (hh > 6 || hh < 0 || mm < 0 || mm > 360) {
-			popup.showMessage("*use arrows to enter a valid input :)");
+			popup.showMessage("*use arrows to enter a valid input!");
 			popup.resetInput();
 		}
 		else {
+			chrome.storage.sync.set({ status: "running", hh: hh, mm: mm, initialHH: hh, initialMM: mm });
 			chrome.runtime.sendMessage({
-				status: "Start",
+				status: "start",
 				hh: hh,
 				mm: mm
 			});
-			popup.updateValues();
+			popup.updateValues(hh, mm);
 			popup.timerRunningDisplay();
 		}
 	});
@@ -45,7 +49,8 @@ chrome.runtime.onMessage.addListener((message) => {
 		popup.timeInputMode();
 	}
 	else if (message.isCompleted === false) {
-		popup.updateValues();
+		let newHH = message.hh, newMM = message.mm;
+		popup.updateValues(newHH, newMM);
 	}
 	return true;
 });
@@ -67,17 +72,6 @@ let popup = {
 		$("#ipmin").val("");
 		$("#iphr").val("");
 	},
-	startTimer: function (hh, mm) {
-		chrome.storage.sync.set({ status: "running", hh: hh, mm: mm });
-		popup.timerRunningMode();
-		chrome.runtime.sendMessage({
-			status: "start",
-			hh: hh,
-			mm: mm
-		});
-		popup.resetInput();
-		popup.resetHead2();
-	},
 	timerRunningDisplay: function () {
 		$("#head2").css("display", "none");
 		$("#timeWindow").css("display", "none");
@@ -86,14 +80,17 @@ let popup = {
 		$("#timedisplay").css("display", "block");
 		$("#stopbtn").css("display", "block");
 	},
-	updateValues: function(){
-		chrome.storage.sync.get(['hh', 'mm', 'initialHH', 'initialMM'], function (result) {
-			let newHH = result.hh, newMM = result.mm;
-			let tot = (Number(result.initialHH) * 60) + Number(result.initialMM);
+	updateValues: function (newHH, newMM) {
+		chrome.storage.sync.get(['initialHH', 'initialMM'], (res) => {
+			let ih = Number(res.initialHH);
+			let im = Number(res.initialMM);
+			let tot = (Number(ih) * 60) + Number(im);
 			let precentage = ((Number((newHH) * 60) + Number(newMM)) / Number(tot)) * 100;
 			console.log(precentage);
-			$("#l").css("width", 100-precentage + '%');
-			$("#r").css("width", precentage + '%');
+
+			$("#l").animate({width: 100 - precentage + '%'},800);
+
+			//$("#l").css("width", 100 - precentage + '%');
 			$("#timedisplay").html(`hh:${newHH} mm:${newMM}`);
 			console.log(`hh:${newHH}, mm:${newMM}`);
 		});

@@ -5,6 +5,7 @@ chrome.runtime.onMessage.addListener((message) => {
 		console.log(`values are: hh:${message.hh} mm:${message.mm}`);
 		hhh = message.hh;
 		mmm = message.mm;
+		chrome.storage.sync.set({initialHH: hhh, initialMM: mmm});
 		console.log(`time: ${hhh}: ${mmm}`);
 		let totalTime = bg.totalSecs(hhh, mmm);
 		totalTime -= 1;
