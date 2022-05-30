@@ -2,17 +2,21 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="/css/style.css" >
+	<link rel="stylesheet" href="/css/style.css">
 	<script src="/js/jquery-3.6.0.js"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
 </head>
 
 <body>
 	<h1 class="heading">TIMER</h1>
+	<div id="divider"></div>
 	<p id="head2">Enter time:</p>
 	<div id="timeWindow">
 		<div class="hr">
 			<span>HH</span>
-			<input type="number" id="iphr" inputmode="numeric" name="number" max="6" min="0" step="1" value="">
+			<input type="number" id="iphr" inputmode="numeric" name="number" max="60" min="0" step="1" value="">
 		</div>
 		<div class="min">
 			<span>MM</span>
@@ -21,12 +25,29 @@
 		</div>
 	</div>
 	<button id="button" type="button">Start</button>
-	
-	<p id="timedisplay">hh:23 mm:05</p>
+
+	<p id="timedisplay">07:15:36</p>
 	<div id="progressBar">
 		<div id="l"></div>
 	</div>
 	<button id="stopbtn">Stop</button>
+	<!-- <script> // making running time page
+		$("#head2").css("display", "none");
+		$("#timeWindow").css("display", "none");
+		$("#button").css("display", "none");
+		$("#progressBar").css("display", "block");
+		$("#timedisplay").css("display", "block");
+		$("#stopbtn").css("display", "block");
+		$("#l").css("width", 60 + '%');
+	</script> -->
+	<!-- <--<script> //making input time 
+		$("#head2").css("display", "block");
+		$("#timeWindow").css("display", "block");
+		$("#button").css("display", "block");
+		$("#progressBar").css("display", "none");
+		$("#timedisplay").css("display", "none");
+		$("#stopbtn").css("display", "none");
+	</script> -->
 	<script src="/js/popup.js"></script>
 </body>
 

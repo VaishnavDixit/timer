@@ -1,11 +1,18 @@
 {
 	"manifest_version": 3,
-	"name": "Timer",
+	"name": "Simple Timer: A mimimalistic timer for the browser",
 	"version": "1.0",
 	"action": {
 		"default_popup": "/html/popup.html",
 		"default_title": "View timer"
 	},
+	"icons": {
+        "16": "/img/icon16.png",
+        "32": "/img/icon32.png",
+        "48": "/img/icon48.png",
+        "64": "/img/icon64.png",
+        "128": "/img/icon128.png"
+    },
 	"permissions":[
 		"storage"
 	],

@@ -1,27 +1,26 @@
 chrome.runtime.onMessage.addListener((message) => {
-	let hhh = -1, mmm = -1;
 	if (message.status === "start") {
 		console.log("timer started!");
-		console.log(`values are: hh:${message.hh} mm:${message.mm}`);
-		hhh = message.hh;
-		mmm = message.mm;
-		chrome.storage.sync.set({initialHH: hhh, initialMM: mmm});
-		console.log(`time: ${hhh}: ${mmm}`);
-		let totalTime = bg.totalSecs(hhh, mmm);
-		totalTime -= 1;
+		let hhh = Number(message.hh);
+		let mmm = Number(message.mm);
+		console.log(`values are: hh:${hhh} mm:${mmm}`);
+		let totalTime = bg.totalSecs(hhh, mmm, 0)-1;
 		bg.check = setInterval(() => {
-			if (totalTime == 0) {
+			console.log(`->${totalTime}`)
+			if (totalTime === 0) {
 				bg.stopTimer();
-			} 
+			}
 			else {
-				let newHH=Math.floor(Number(totalTime/ 60));
-				let newMM=Math.floor(Number(totalTime% 60));
-				chrome.storage.sync.set({hh: newHH, mm: newMM});
+				let newHH=Math.floor(totalTime/3600);
+				let newMM=Math.floor((totalTime%3600)/60);
+				let newSS=totalTime%3600%60;
 				chrome.runtime.sendMessage({
 					isCompleted: false,
 					hh: newHH,
-					mm: newMM
+					mm: newMM,
+					ss: newSS
 				});
+				chrome.storage.sync.set({hh: newHH, mm: newMM,  ss: newSS});
 				totalTime -= 1;
 			}
 		}, 1000);
@@ -35,13 +34,13 @@ let bg = {
 	check: 0,
 	stopTimer: function () {
 		clearInterval(bg.check);
-		chrome.storage.sync.set({ 'status': "waiting" });
+		chrome.storage.sync.set({ 'isRunning': false });
 		console.log("times up!");
 		chrome.runtime.sendMessage({
 			isCompleted: true
 		});
 	},
-	totalSecs: function (hh, mm) {
-		return (Number(hh * 60) + Number(mm)); // not correct: debug mode
+	totalSecs: function (hh, mm,ss) {//todo
+		return Number((Number(hh)*3600) + (Number(mm)*60)+Number(ss)); // not correct: debug mode
 	}
 }
