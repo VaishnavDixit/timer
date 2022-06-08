@@ -51,10 +51,14 @@ chrome.runtime.onMessage.addListener((message) => {
 		popup.timeInputMode();
 	}
 	else if (message.isCompleted === false) {
+		console.log("fffff");
 		popup.updateValues(message.hh, message.mm, message.ss);
 	}
-	return true;
+	//return true;
 });
+////////
+////////
+////////
 let popup = {
 	showMessage: function (msg) {
 		$("#head2").html(msg);
@@ -62,14 +66,12 @@ let popup = {
 	},
 	stopTimer: function () {
 		this.timeInputMode();
-		//$("#button").removeAttr("disabled");
 	},
 	resetHead2: function () {
 		$("#head2").html("Enter time:");
 		$("#head2").css("color", "");
 	},
 	resetInput: function () {
-		//$("#stopbtn").removeAttr("disabled");
 		$("#ipmin").val("");
 		$("#iphr").val("");
 	},
@@ -99,8 +101,8 @@ let popup = {
 		$("#timedisplay").css("display", "none");
 		$("#stopbtn").css("display", "none");
 	},
-	totalSecs: function (hh, mm, ss) {//todo
-		return Number((Number(hh)*3600) + (Number(mm)*60) + Number(ss)); // not correct: debug mode
+	totalSecs: function (hh, mm, ss) {
+		return Number((Number(hh)*3600) + (Number(mm)*60) + Number(ss));
 	},
 	displayAble: function(num){
 		if(num<10)

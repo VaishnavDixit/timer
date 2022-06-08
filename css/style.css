@@ -10,8 +10,6 @@ body {
     height: fit-content;
     background-color: var(--backColor);
     border: 1px solid var(--borderColor);
-    /* border-radius: 5px; */
-    /* padding: 5px; */
 }
 
 #divider{
@@ -117,31 +115,25 @@ span {
 }
 
 #head2 {
-	    /* padding: 10px; */
-		display: block;
-		width: fit-content;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 10px;
-		margin-bottom: 15px;
-		text-align: center;
-		font-size: 17px;
-		font-family: Arial, Helvetica, sans-serif;
-		font-weight: bold;
+	display: block;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 15px;
+	text-align: center;
+	font-size: 17px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
 }
 
 #progressBar {
 	margin: 0px auto 0px auto;
-	/* padding: 1px; */
 	display: none;
 	height: 20px;
 	border: 1px solid black;
 	width: 90%;
 	background-color: rgb(207 228 235);
-	/* border-top-left-radius: 5px; */
-	/* border-top-right-radius: 50px; */
-	/* border-bottom-right-radius: 50px; */
-	/* border-bottom-left-radius: 5px; */
 }
 
 #l {
@@ -149,8 +141,4 @@ span {
 	width: 0%;
 	height: 100%;
 	background-color: var(--progressBarColor);
-	/* border-top-left-radius: 5px; */
-	/* border-top-right-radius: 50px; */
-	/* border-bottom-right-radius: 50px; */
-	/* border-bottom-left-radius: 5px; */
 }

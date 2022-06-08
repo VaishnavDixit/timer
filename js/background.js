@@ -1,12 +1,12 @@
 chrome.runtime.onMessage.addListener((message) => {
 	if (message.status === "start") {
-		console.log("timer started!");
+		//console.log("timer started!");
 		let hhh = Number(message.hh);
 		let mmm = Number(message.mm);
-		console.log(`values are: hh:${hhh} mm:${mmm}`);
+		//console.log(`values are: hh:${hhh} mm:${mmm}`);
 		let totalTime = bg.totalSecs(hhh, mmm, 0)-1;
 		bg.check = setInterval(() => {
-			console.log(`->${totalTime}`)
+			//console.log(`->${totalTime}`)
 			if (totalTime === 0) {
 				bg.stopTimer();
 			}
@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener((message) => {
 	else if (message.status === "stop") {
 		bg.stopTimer();
 	}
-	return true;
+	//return true;
 });
 let bg = {
 	check: 0,
